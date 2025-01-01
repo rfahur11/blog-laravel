@@ -1,13 +1,12 @@
 <?php
 
+use App\Http\Controllers\Front\HomepageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Member\BlogController;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('components.front.home-page');
-});
+Route::get('/', [HomepageController::class,'index']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
