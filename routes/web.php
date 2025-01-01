@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Member\BlogController;
+use GuzzleHttp\Promise\Create;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -23,7 +24,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('/member/blogs', BlogController::class)->names([
         'index' => 'member.blogs.index',
         'edit' => 'member.blogs.edit',
-        'update'=>'member.blogs.update'
+        'update'=>'member.blogs.update',
+        'create' => 'member.blogs.create',
+        'store' => 'member.blogs.store',
+        'destroy' => 'member.blogs.destroy'
     ])->parameters([
         'blogs' => 'post'
     ]);
