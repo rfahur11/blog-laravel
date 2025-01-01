@@ -14,10 +14,16 @@ class BlogController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $user=Auth::user();
-        $data = Post ::where('user_id',$user->id)->orderBy('id','desc')->paginate(3);
+        $search=$request->search;
+        
+        $data = Post ::where('user_id',$user->id)->where(function($query) use ($search){
+            if ($search) {
+                $query->where('title','like',"%{$search}%")->orWhere('content','like',"%{$search}%");
+            }
+        })->orderBy('id','desc')->paginate(3)->withQueryString();
         return view('member.blogs.index',compact('data'));
     }
 

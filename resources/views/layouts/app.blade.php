@@ -24,7 +24,17 @@
             @isset($header)
             <header class="bg-white shadow">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
+                    <div class="block md:flex justify-between">
+                        <div>{{ $header }}</div>
+                        <div>
+                            @isset($headerRight) 
+                            {{ $headerRight }}    
+                            @endisset
+                        </div>
+                    </div>
+                    
+                    
+                    
                     @session('success')
                     <div class="max-w-7xl mx-auto bg-blue-400 p-3 mt-3 rounded-md">
                         <ul class="list-disc pl-5">

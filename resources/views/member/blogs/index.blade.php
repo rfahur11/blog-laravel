@@ -4,6 +4,12 @@
             Pengaturan Blog <a href="{{ route('member.blogs.create') }}" class="bg-blue-400 p-2 rounded-md text-sm text-white">Tambah Data</a>
         </h2>
     </x-slot>
+    <x-slot name="headerRight">
+        <form action="{{ route('member.blogs.index') }}" method="GET">
+            <x-text-input id="search" type="text" name="search" placeholder="Cari Data" class="p-1 m-0 md:w-72 w-80 mt-3 md:mt-0" value="{{ request('search') }}" />
+            <x-secondary-button class="p-1" type="submit">Cari</x-secondary-button>
+        </form>
+    </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
