@@ -3,7 +3,7 @@
 use App\Http\Controllers\Front\HomepageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Member\BlogController;
-use GuzzleHttp\Promise\Create;
+use App\Http\Controllers\Front\BlogDetailController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomepageController::class,'index']);
@@ -34,3 +34,5 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/{slug}',[BlogDetailController::class,'detail'])->name('blog-detail');

@@ -162,6 +162,4 @@ class BlogController extends Controller
         }
         return $slug;
     }
-
-
 }

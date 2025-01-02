@@ -11,4 +11,8 @@ class Post extends Model
 
     protected $table = "posts";
     protected $fillable = ['title','slug','descripstion','content','status','thumbnail','user_id'];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }
