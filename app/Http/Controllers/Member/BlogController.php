@@ -55,22 +55,29 @@ class BlogController extends Controller
         );
 
         if ($request->hasFile('thumbnail')) {
-                        
+            $destination_path = public_path(getenv('CUSTOM_THUMBNAIL_LOCATION'));
+        
+            // Cek apakah direktori ada, jika tidak buat
+            if (!file_exists($destination_path)) {
+                mkdir($destination_path, 0755, true);
+            }
+        
             $image = $request->file('thumbnail');
-            $image_name = time()."_".$image->getClientOriginalName();
-            $destination_path=public_path(getenv('CUSTOM_THUMBAIL_LOCATION'));
-            $image->move($destination_path,$image_name);
+            $image_name = time() . "_" . $image->getClientOriginalName();
+            $image->move($destination_path, $image_name);
         }
+        
 
-        $data=[
-            'title'=>$request->title,
-            'content'=>$request->content,
-            'status'=>$request->status,
-            'description'=>$request->description,
-            'thumbnail'=>isset($image_name)?$image_name:null,
-            'slug' =>$this->generateSlug($request->title),
-            'user_id'=> Auth::user()->id
+        $data = [
+            'title' => $request->title,
+            'content' => $request->content,
+            'status' => $request->status ?? 'draft', // Default status
+            'description' => $request->description ?? '', // Default description
+            'thumbnail' => isset($image_name) ? $image_name : ($post->thumbnail ?? null),
+            'slug' => $this->generateSlug($request->title, $post->id ?? null),
+            'user_id' => Auth::user()->id,
         ];
+        
 
         Post::create($data);
         return redirect()->route('member.blogs.index')->with('success','Data Berhasil ditambahkan');
@@ -114,13 +121,13 @@ class BlogController extends Controller
 
         if ($request->hasFile('thumbnail')) {
             
-            if (isset($post->thumbnail) && file_exists(public_path(getenv('CUSTOM_THUMBAIL_LOCATION'))."/".$post->thumbnail)) {
-                unlink(public_path(getenv('CUSTOM_THUMBAIL_LOCATION'))."/".$post->thumbnail);
+            if (isset($post->thumbnail) && file_exists(public_path(getenv('CUSTOM_THUMBNAIL_LOCATION'))."/".$post->thumbnail)) {
+                unlink(public_path(getenv('CUSTOM_THUMBNAIL_LOCATION'))."/".$post->thumbnail);
             }
 
             $image = $request->file('thumbnail');
             $image_name = time()."_".$image->getClientOriginalName();
-            $destination_path=public_path(getenv('CUSTOM_THUMBAIL_LOCATION'));
+            $destination_path=public_path(getenv('CUSTOM_THUMBNAIL_LOCATION'));
             $image->move($destination_path,$image_name);
         }
 
@@ -143,8 +150,8 @@ class BlogController extends Controller
     public function destroy(Post $post)
     {
         Gate::authorize('delete',$post);
-        if (isset($post->thumbnail) && file_exists(public_path(getenv('CUSTOM_THUMBAIL_LOCATION'))."/".$post->thumbnail)) {
-            unlink(public_path(getenv('CUSTOM_THUMBAIL_LOCATION'))."/".$post->thumbnail);
+        if (isset($post->thumbnail) && file_exists(public_path(getenv('CUSTOM_THUMBNAIL_LOCATION'))."/".$post->thumbnail)) {
+            unlink(public_path(getenv('CUSTOM_THUMBNAIL_LOCATION'))."/".$post->thumbnail);
         }
         Post::where('id',$post->id)->delete();
         return redirect()->route('member.blogs.index')->with('success','Data Berhasil dihapus ');
